@@ -1,12 +1,15 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +21,38 @@ public class ViewWork extends AppCompatActivity {
     ArrayList paths = null;
     ArrayList names= null;
     List<Map<String, Object>> listItems;
+
+    private ArrayList<HashMap<String, Object>> lists;
+    private SimpleAdapter adapter;
+    private ListView listView;
+    private String[] theme = {"张明", "李明", "李明"};
+    private String[] content = {"600 602 501", "666 620 502", "666 620 503"};
+    private int imageViews = R.mipmap.ic_launcher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_view_work);
         GetImagesPath();
         Log.i("GetImagesPath", "onCreate: listItems.size " + listItems.size());
+
+        lists = new ArrayList<>();
+        for (int i = 0; i < theme.length; i++) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("ItemImage", "/storage/emulated/0/Pictures/1635314041098.jpg");//加入图片
+            map.put("ItemTitle", "第"+i+"行");
+            map.put("ItemText", "这是第"+i+"行");
+            lists.add(map);
+        }
+        listView = (ListView)findViewById(R.id.lv);
+        //适配器指定应用自己定义的xml格式
+        SimpleAdapter mSimpleAdapter = new SimpleAdapter(this,lists,//需要绑定的数据
+                R.layout.item_picture,//每一行的布局
+                //动态数组中的数据源的键对应到定义布局的View中
+                new String[] {"ItemImage","ItemTitle", "ItemText"},
+                new int[] {R.id.ItemImage,R.id.ItemTitle,R.id.ItemText});
+
+        listView.setAdapter(mSimpleAdapter);
     }
 
     void GetImagesPath(){
