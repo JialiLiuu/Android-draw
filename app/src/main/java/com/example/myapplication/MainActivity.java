@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void viewPicture() {
-
+        Intent intent = new Intent(this,ViewWork.class);
+        MainActivity.this.startActivity(intent);
     }
 }
