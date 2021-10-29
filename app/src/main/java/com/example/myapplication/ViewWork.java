@@ -1,18 +1,14 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Dialog;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.widget.HorizontalScrollView;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -26,6 +22,10 @@ import java.util.Map;
 
 public class ViewWork extends AppCompatActivity {
 
+    ArrayList paths = null;
+    ArrayList names= null;
+    List<Map<String, Object>> listItems;
+
     private RecyclerView mRecyclerView;
     private Adapter mAdapter;
 
@@ -33,6 +33,10 @@ public class ViewWork extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_work);
+
+        GetImagesPath();
+        Log.i("GetImagesPath", "onCreate: listItems.size " + listItems.size());
+
         initView();//调用初始化控件方法
         setAdapter();//调用设置适配器方法
     }
@@ -44,7 +48,7 @@ public class ViewWork extends AppCompatActivity {
         //设置布局管理器
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //设置适配器
-        mRecyclerView.setAdapter(mAdapter = new Adapter(this));
+        mRecyclerView.setAdapter(mAdapter = new Adapter(this, listItems));
         //设置列表中子项的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
@@ -83,34 +87,52 @@ public class ViewWork extends AppCompatActivity {
 //        listView.setAdapter(mSimpleAdapter);
 //    }
 
-//    void GetImagesPath(){
-//
-//        paths = new ArrayList();
-//        names = new ArrayList();
-//
-//        Cursor cursor = getContentResolver().query(
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
-//        while (cursor.moveToNext()) {
-//            //获取图片的名称
-//            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
-//            // 获取图片的绝对路径
-//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//            String path = cursor.getString(column_index);
-//
-//
-//            paths.add(path);
-//            names.add(name);
-//
-//            Log.i("GetImagesPath", "GetImagesPath: name = "+name+"  path = "+ path);
-//
-//
-//        }
-//        listItems = new ArrayList<>();
-//        for (int i = 0; i < paths.size(); i++) {
-//            Map<String, Object> map = new HashMap<>();
-//            map.put("name", paths.get(i));
-//            map.put("desc", names.get(i));
-//            listItems.add(map);
-//        }
+    void GetImagesPath(){
+
+        paths = new ArrayList();
+        names = new ArrayList();
+
+        Cursor cursor = getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, null);
+        while (cursor.moveToNext()) {
+            //获取图片的名称
+            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+            // 获取图片的绝对路径
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String path = cursor.getString(column_index);
+
+
+            paths.add(path);
+            names.add(name);
+
+            Log.i("GetImagesPath", "GetImagesPath: name = "+name+"  path = "+ path);
+
+
+        }
+        listItems = new ArrayList<>();
+        for (int i = 0; i < paths.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("path", paths.get(i));
+            map.put("name", names.get(i));
+            listItems.add(map);
+        }
+    }
+
+//    public void bigImageLoader(Bitmap bitmap){
+//        final Dialog dialog = new Dialog(ViewWork.this);
+//        ImageView image = new ImageView(this);
+//        image.setImageBitmap(bitmap);
+//        dialog.setContentView(image);
+//        //将dialog周围的白块设置为透明
+//        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//        //显示
+//        dialog.show();
+//        //点击图片取消
+//        image.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v){
+//                dialog.cancel();
+//            }
+//        });
 //    }
 }

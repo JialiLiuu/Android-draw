@@ -1,6 +1,11 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +15,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
+
+    private String TAG = "Adapter";
 
     //图标数组
     private int[] icons = {R.drawable.bg};
 
     //名字数组
-    private int[] names = {11};
+    private int[] namess = {11};
 
     //信息数组
     private int[] infos = {22};
@@ -27,17 +37,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     private Context lContent;//定义上下文
 
     //集合
-    private List<Integer> listIcon = new ArrayList<>();
-    private List<Integer> listName = new ArrayList<>();
-    private List<Integer> listInfo = new ArrayList<>();
+    private List<String> listIcon = new ArrayList<>();
+    private List<String> listName = new ArrayList<>();
+    private List<String> listInfo = new ArrayList<>();
 
-    public Adapter(Context lContent) {
+    public Adapter(Context lContent, List<Map<String, Object>> listItems) {
         this.lContent = lContent;
         //设置菜单行数与行内图标、名称、信息
-        for (int i = 0; i < 1; i++) {
-            listIcon.add(icons[i]);
-            listName.add(names[i]);
-            listInfo.add(infos[i]);
+        for (Map<String, Object> map:listItems) {
+//            listIcon.add(icons[i]);
+//            listName.add(namess[i]);
+//            listInfo.add(infos[i]);
+            listIcon.add(map.get("path").toString());
+            listName.add(map.get("name").toString());
+            listInfo.add("编辑");
         }
     }
 
@@ -53,7 +66,18 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         //设置图标
-        holder.img.setBackgroundResource(listIcon.get(position));
+        File file = new File(listIcon.get(position));
+        //将bitmap转化成drawable
+        Bitmap bmp = null;
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(lContent.getContentResolver(), Uri.fromFile(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        holder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        holder.img.setImageBitmap(bmp);
+
         //设置名称
         holder.name.setText(""+listName.get(position));
         //设置信息
@@ -69,6 +93,40 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                 removeData(n);//删除列表中指定的行
             }
         });
+
+        holder.img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int n = holder.getLayoutPosition();//获取要放大行的位置
+                File file = new File(listIcon.get(n));
+                //将bitmap转化成drawable
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(lContent.getContentResolver(), Uri.fromFile(file));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                bigImageLoader(bitmap);//放大列表中指定的行
+            }
+        });
+    }
+
+    private void bigImageLoader(Bitmap bitmap){
+        final Dialog dialog = new Dialog(lContent);
+        ImageView image = new ImageView(lContent);
+        image.setImageBitmap(bitmap);
+        dialog.setContentView(image);
+        //将dialog周围的白块设置为透明
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        //显示
+        dialog.show();
+        //点击图片取消
+        image.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                dialog.cancel();
+            }
+        });
     }
 
     //返回行的总数
@@ -79,6 +137,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     //删除列表行中信息的方法
     public void removeData(int position){
+        File file = new File(listIcon.get(position));
+        if (file.isFile() && file.exists()) {
+            file.delete();
+            Log.i(TAG,"图片删除成功");
+        }
+        else{
+            Log.i(TAG,"图片删除失败");
+        }
         listIcon.remove(position);//删除图标
         listName.remove(position);//删除行中名字
         listInfo.remove(position);//删除信息

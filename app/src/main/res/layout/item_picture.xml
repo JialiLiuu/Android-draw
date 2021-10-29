@@ -16,6 +16,7 @@
             android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/layout_content"
+            android:background="@drawable/btn_click_red_bg"
             android:gravity="center"
             android:text="删除"
             android:textColor="@android:color/white"/>

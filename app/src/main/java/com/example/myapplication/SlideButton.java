@@ -23,17 +23,6 @@ import java.util.Map;
 
 public class SlideButton extends HorizontalScrollView {
 
-    ArrayList paths = null;
-    ArrayList names= null;
-    List<Map<String, Object>> listItems;
-
-    private ArrayList<HashMap<String, Object>> lists;
-    private SimpleAdapter adapter;
-    private ListView listView;
-    private String[] theme = {"张明", "李明", "李明"};
-    private String[] content = {"600 602 501", "666 620 502", "666 620 503"};
-    private int imageViews = R.mipmap.ic_launcher;
-
     private static final String TAG = "SlidingButtonView";
     private TextView lTextView_Delete;//删除按钮
     private int lScrollWith;//横向滚动范围
