@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class SlideButton extends HorizontalScrollView {
 
-    private static final String TAG = "SlidingButtonView";
+    private static final String TAG = "图片列表显示的滑动删除控件";
     private TextView lTextView_Delete;//删除按钮
     private int lScrollWith;//横向滚动范围
     private boolean first = false; //标记第一次进入获取删除按钮控件

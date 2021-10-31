@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
-    private String TAG = "Adapter";
+    private String TAG = "展示图片列表的Adapter";
 
     private Context lContent;//定义上下文
 
@@ -71,9 +71,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         holder.img.setScaleType(ImageView.ScaleType.CENTER_CROP);
         holder.img.setImageBitmap(bmp);
 
-        //设置名称
+        //设置图片名称
         holder.name.setText(""+listName.get(position));
-        //设置信息
+        //设置图片
         holder.info.setText(""+listInfo.get(position));
         //设置内容宽度为屏幕的宽度
         holder.layout_content.getLayoutParams().width = Utils.getScreenWidth(lContent);
@@ -106,13 +106,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
             @Override
             public void onClick(View view) {
                 int n = holder.getLayoutPosition();//需要编辑的位置
-//                Drawable drawable = null;
-//                try{
-//                    drawable = Drawable.createFromStream(new URL(listIcon.get(n)).openStream(),"image.jpg");
-//                }catch (IOException e){
-//                    e.printStackTrace();
-//                }
-
                 Intent intent = new Intent(lContent,CreateWork.class);
                 intent.putExtra("code",2);
                 intent.putExtra("background",listIcon.get(n));

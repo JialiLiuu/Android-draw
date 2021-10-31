@@ -22,6 +22,8 @@ import java.util.Map;
 
 public class ViewWork extends AppCompatActivity {
 
+    private String TAG = "展示图片列表的Activity";
+
     ArrayList paths = null;
     ArrayList names= null;
     List<Map<String, Object>> listItems;
@@ -63,32 +65,6 @@ public class ViewWork extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.lv);
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_view_work);
-//        GetImagesPath();
-//        Log.i("GetImagesPath", "onCreate: listItems.size " + listItems.size());
-//
-//        lists = new ArrayList<>();
-//        for (int i = 0; i < theme.length; i++) {
-//            HashMap<String, Object> map = new HashMap<>();
-//            map.put("ItemImage", "/storage/emulated/0/Pictures/1635314041098.jpg");//加入图片
-//            map.put("ItemTitle", "第"+i+"行");
-//            map.put("ItemText", "这是第"+i+"行");
-//            lists.add(map);
-//        }
-//        listView = (ListView)findViewById(R.id.lv);
-//        //适配器指定应用自己定义的xml格式
-//        SimpleAdapter mSimpleAdapter = new SimpleAdapter(this,lists,//需要绑定的数据
-//                R.layout.item_picture,//每一行的布局
-//                //动态数组中的数据源的键对应到定义布局的View中
-//                new String[] {"ItemImage","ItemTitle", "ItemText"},
-//                new int[] {R.id.ItemImage,R.id.ItemTitle,R.id.ItemText});
-//
-//        listView.setAdapter(mSimpleAdapter);
-//    }
-
     void GetImagesPath(){
 
         paths = new ArrayList();
@@ -107,9 +83,7 @@ public class ViewWork extends AppCompatActivity {
             paths.add(path);
             names.add(name);
 
-            Log.i("GetImagesPath", "GetImagesPath: name = "+name+"  path = "+ path);
-
-
+            Log.i(TAG, "图片路径是"+ path);
         }
         listItems = new ArrayList<>();
         for (int i = 0; i < paths.size(); i++) {

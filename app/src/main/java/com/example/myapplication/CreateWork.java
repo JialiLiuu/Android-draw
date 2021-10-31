@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +30,7 @@ import java.net.URL;
 
 public class CreateWork extends AppCompatActivity implements View.OnClickListener, PaletteView.Callback, Handler.Callback {
 
-    private String TAG = "创建图画";
+    private String TAG = "创建图画的Activity";
 
     private View mUndoView;
     private View mRedoView;

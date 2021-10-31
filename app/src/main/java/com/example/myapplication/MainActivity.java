@@ -22,16 +22,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FloatingActionButton createbutton,viewbutton;
-    String user_pin = "1212";
     int index;
 
      int[] mThumbIds={//显示的图片数组
 
-            R.drawable.tt,R.drawable.tt,
-            R.drawable.tt,R.drawable.bg,
-            R.drawable.bg,R.drawable.bg,
-            R.drawable.bg,R.drawable.bg,
-            R.drawable.bg
+            R.drawable.bg_1,R.drawable.bg_2,
+            R.drawable.bg_3,R.drawable.bg_4,
+            R.drawable.bg_5,R.drawable.bg_6,
+            R.drawable.bg_7,R.drawable.bg_8,
+            R.drawable.bg_9
     };
 
     @Override
