@@ -27,7 +27,7 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
 
     private String TAG = "创建图画";
 
-    String user_pin;
+    int background;
 
     private View mUndoView;
     private View mRedoView;
@@ -47,12 +47,11 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
 
         Intent intent = getIntent();
 
-        user_pin = intent.getStringExtra("user_pin");
-
-        Log.i(TAG,"用户的pin值是："+user_pin);
+        background = intent.getIntExtra("background",1);
 
         mPaletteView = (PaletteView) findViewById(R.id.palette);
         mPaletteView.setCallback(this);
+        mPaletteView.setBackgroundResource(background);
 
         mUndoView = findViewById(R.id.undo);
         mRedoView = findViewById(R.id.redo);

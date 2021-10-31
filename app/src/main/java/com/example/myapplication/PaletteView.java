@@ -69,7 +69,7 @@ public class PaletteView extends View {
         void onUndoRedoStatusChanged();
     }
 
-    public void setCallback(Callback callback){
+    public void setCallback(Callback callback) {
         mCallback = callback;
     }
 
@@ -89,17 +89,18 @@ public class PaletteView extends View {
         mPaint.setXfermode(mXferModeDraw);
     }
 
-    private void initBuffer(){
+    private void initBuffer() {
         mBufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         mBufferCanvas = new Canvas(mBufferBitmap);
     }
 
     private abstract static class DrawingInfo {
         Paint paint;
+
         abstract void draw(Canvas canvas);
     }
 
-    private static class PathDrawingInfo extends DrawingInfo{
+    private static class PathDrawingInfo extends DrawingInfo {
 
         Path path;
 
@@ -132,7 +133,7 @@ public class PaletteView extends View {
 
     public void setPenRawSize(int size) {
         mDrawSize = size;
-        if(mMode == Mode.DRAW){
+        if (mMode == Mode.DRAW) {
             mPaint.setStrokeWidth(mDrawSize);
         }
     }
@@ -141,7 +142,7 @@ public class PaletteView extends View {
         mPaint.setColor(color);
     }
 
-    private void reDraw(){
+    private void reDraw() {
         if (mDrawingList != null) {
             mBufferBitmap.eraseColor(Color.TRANSPARENT);
             for (DrawingInfo drawingInfo : mDrawingList) {
@@ -151,26 +152,26 @@ public class PaletteView extends View {
         }
     }
 
-    public int getPenColor(){
+    public int getPenColor() {
         return mPaint.getColor();
     }
 
-    public int getPenSize(){
+    public int getPenSize() {
         return mDrawSize;
     }
 
-    public int getEraserSize(){
+    public int getEraserSize() {
         return mEraserSize;
     }
 
-    public void setPenAlpha(int alpha){
+    public void setPenAlpha(int alpha) {
         mPenAlpha = alpha;
-        if(mMode == Mode.DRAW){
+        if (mMode == Mode.DRAW) {
             mPaint.setAlpha(alpha);
         }
     }
 
-    public int getPenAlpha(){
+    public int getPenAlpha() {
         return mPenAlpha;
     }
 
@@ -178,7 +179,7 @@ public class PaletteView extends View {
         return mRemovedList != null && mRemovedList.size() > 0;
     }
 
-    public boolean canUndo(){
+    public boolean canUndo() {
         return mDrawingList != null && mDrawingList.size() > 0;
     }
 
@@ -237,7 +238,7 @@ public class PaletteView extends View {
         return result;
     }
 
-    private void saveDrawingPath(){
+    private void saveDrawingPath() {
         if (mDrawingList == null) {
             mDrawingList = new ArrayList<>(MAX_CACHE_STEP);
         } else if (mDrawingList.size() == MAX_CACHE_STEP) {
@@ -266,7 +267,7 @@ public class PaletteView extends View {
     @SuppressWarnings("all")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(!isEnabled()){
+        if (!isEnabled()) {
             return false;
         }
         final int action = event.getAction() & MotionEvent.ACTION_MASK;
@@ -279,7 +280,7 @@ public class PaletteView extends View {
                 if (mPath == null) {
                     mPath = new Path();
                 }
-                mPath.moveTo(x,y);
+                mPath.moveTo(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
                 //这里终点设为两点的中心点的目的在于使绘制的曲线更平滑，如果终点直接设置为x,y，效果和lineto是一样的,实际是折线效果
@@ -290,7 +291,7 @@ public class PaletteView extends View {
                 if (mMode == Mode.ERASER && !mCanEraser) {
                     break;
                 }
-                mBufferCanvas.drawPath(mPath,mPaint);
+                mBufferCanvas.drawPath(mPath, mPaint);
                 invalidate();
                 mLastX = x;
                 mLastY = y;
