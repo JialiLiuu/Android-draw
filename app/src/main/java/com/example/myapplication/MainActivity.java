@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void createPicture() {
         Intent intent = new Intent(this,CreateWork.class);
+        intent.putExtra("code",1);
         intent.putExtra("background",mThumbIds[index]);
         MainActivity.this.startActivity(intent);
     }

@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,15 +20,16 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class CreateWork extends AppCompatActivity implements View.OnClickListener, PaletteView.Callback, Handler.Callback {
 
     private String TAG = "创建图画";
-
-    int background;
 
     private View mUndoView;
     private View mRedoView;
@@ -46,13 +48,27 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_create_work);
 
         Intent intent = getIntent();
-
-        background = intent.getIntExtra("background",1);
+        int code = intent.getIntExtra("code",-1);
 
         mPaletteView = (PaletteView) findViewById(R.id.palette);
         mPaletteView.setCallback(this);
-        mPaletteView.setBackgroundResource(background);
+        if(code==1){
+            int background = intent.getIntExtra("background",1);
+            mPaletteView.setBackgroundResource(background);
+        }
+        else if(code==2){
+            String background = intent.getStringExtra("background");
+            FileInputStream fileInputStream = null;
+            try {
+                File file = new File(background);
+                fileInputStream = new FileInputStream(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+            final Drawable d = Drawable.createFromStream(fileInputStream, "src");
+            mPaletteView.setBackground(d);
+        }
         mUndoView = findViewById(R.id.undo);
         mRedoView = findViewById(R.id.redo);
         mPenView = findViewById(R.id.pen);

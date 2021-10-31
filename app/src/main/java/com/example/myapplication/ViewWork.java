@@ -51,6 +51,8 @@ public class ViewWork extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter = new Adapter(this, listItems));
         //设置列表中子项的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
     }
 
     /**
@@ -117,22 +119,4 @@ public class ViewWork extends AppCompatActivity {
             listItems.add(map);
         }
     }
-
-//    public void bigImageLoader(Bitmap bitmap){
-//        final Dialog dialog = new Dialog(ViewWork.this);
-//        ImageView image = new ImageView(this);
-//        image.setImageBitmap(bitmap);
-//        dialog.setContentView(image);
-//        //将dialog周围的白块设置为透明
-//        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-//        //显示
-//        dialog.show();
-//        //点击图片取消
-//        image.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                dialog.cancel();
-//            }
-//        });
-//    }
 }

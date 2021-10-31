@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,7 +18,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,15 +29,6 @@ import java.util.Map;
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     private String TAG = "Adapter";
-
-    //图标数组
-    private int[] icons = {R.drawable.bg};
-
-    //名字数组
-    private int[] namess = {11};
-
-    //信息数组
-    private int[] infos = {22};
 
     private Context lContent;//定义上下文
 
@@ -45,9 +41,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
         this.lContent = lContent;
         //设置菜单行数与行内图标、名称、信息
         for (Map<String, Object> map:listItems) {
-//            listIcon.add(icons[i]);
-//            listName.add(namess[i]);
-//            listInfo.add(infos[i]);
             listIcon.add(map.get("path").toString());
             listName.add(map.get("name").toString());
             listInfo.add("编辑");
@@ -93,7 +86,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                 removeData(n);//删除列表中指定的行
             }
         });
-
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,6 +99,30 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
                     e.printStackTrace();
                 }
                 bigImageLoader(bitmap);//放大列表中指定的行
+            }
+        });
+
+        holder.info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int n = holder.getLayoutPosition();//需要编辑的位置
+//                Drawable drawable = null;
+//                try{
+//                    drawable = Drawable.createFromStream(new URL(listIcon.get(n)).openStream(),"image.jpg");
+//                }catch (IOException e){
+//                    e.printStackTrace();
+//                }
+
+                Intent intent = new Intent(lContent,CreateWork.class);
+                intent.putExtra("code",2);
+                intent.putExtra("background",listIcon.get(n));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                lContent.startActivity(intent);
+                if (ViewWork.class.isInstance(lContent)) {
+                    // 转化为activity，然后finish就行了
+                    ViewWork activity = (ViewWork) lContent;
+                    activity.finish();
+                }
             }
         });
     }
