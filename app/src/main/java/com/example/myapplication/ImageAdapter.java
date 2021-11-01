@@ -14,15 +14,19 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.GridView;
 
+import java.util.List;
+
 
 public class ImageAdapter extends BaseAdapter {
 
     int lastPosition;
     int[] status={0,1,1,1,1,1,1,1,1};
     private Context mContext;
-    int[] mThumbIds;
+//    int[] mThumbIds;
+    List<Bitmap> mThumbIds;
 
-    public ImageAdapter(Context c,int[] mThumbIds)
+    public ImageAdapter(Context c, List<Bitmap> mThumbIds)
+//    public ImageAdapter(Context c,int[] mThumbIds)
     {
         mContext=c;
         this.mThumbIds=mThumbIds;
@@ -30,7 +34,7 @@ public class ImageAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return mThumbIds.length;
+        return 9;
     }
 
     @Override
@@ -60,7 +64,8 @@ public class ImageAdapter extends BaseAdapter {
         {
             imageview=(ImageView) convertView;
         }
-        imageview.setImageResource(mThumbIds[position]);
+        //imageview.setImageResource(mThumbIds[position]);
+        imageview.setImageBitmap(mThumbIds.get(position));
         if(status[position]==1){
             imageview.setBackgroundResource(R.drawable.background_before);
         }

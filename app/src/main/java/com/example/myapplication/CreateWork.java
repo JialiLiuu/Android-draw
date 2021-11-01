@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -43,21 +44,22 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
     private static final int MSG_SAVE_FAILED = 2;
     private Handler mHandler;
 
+    int yourChoice=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_work);
 
         Intent intent = getIntent();
-        int code = intent.getIntExtra("code",-1);
+        int code = intent.getIntExtra("code", -1);
 
         mPaletteView = (PaletteView) findViewById(R.id.palette);
         mPaletteView.setCallback(this);
-        if(code==1){
-            int background = intent.getIntExtra("background",1);
+        if (code == 1) {
+            int background = intent.getIntExtra("background", 1);
             mPaletteView.setBackgroundResource(background);
-        }
-        else if(code==2){
+        } else if (code == 2) {
             String background = intent.getStringExtra("background");
             FileInputStream fileInputStream = null;
             try {
@@ -90,6 +92,46 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
 
     }
 
+    private void showSingleChoiceDialog() {
+        final String[] items = {"黑色", "红色", "黄色", "绿色", "蓝色"};
+        AlertDialog.Builder singleChoiceDialog =
+                new AlertDialog.Builder(CreateWork.this);
+        singleChoiceDialog.setTitle("选择画笔颜色");
+        // 第二个参数是默认选项，此处设置为0
+        singleChoiceDialog.setSingleChoiceItems(items, yourChoice,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        yourChoice = which;
+                    }
+                });
+        singleChoiceDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.i(TAG, "选择了->" + items[yourChoice]);
+                        switch (yourChoice) {
+                            case 0:
+                                mPaletteView.setPenColor(0XFF000000);
+                                break;
+                            case 1:
+                                mPaletteView.setPenColor(0XFFFF0000);
+                                break;
+                            case 2:
+                                mPaletteView.setPenColor(0XFFFFFF00);
+                                break;
+                            case 3:
+                                mPaletteView.setPenColor(0XFF008000);
+                                break;
+                            case 4:
+                                mPaletteView.setPenColor(0XFF0000FF);
+                                break;
+                        }
+                    }
+                });
+        singleChoiceDialog.show();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -97,7 +139,7 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
         mHandler.removeMessages(MSG_SAVE_SUCCESS);
     }
 
-    private void initSaveProgressDlg(){
+    private void initSaveProgressDlg() {
         mSaveProgressDlg = new ProgressDialog(this);
         mSaveProgressDlg.setMessage("正在保存,请稍候...");
         mSaveProgressDlg.setCancelable(false);
@@ -111,14 +153,14 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public boolean handleMessage(Message msg) {
-        switch (msg.what){
+        switch (msg.what) {
             case MSG_SAVE_FAILED:
                 mSaveProgressDlg.dismiss();
-                Toast.makeText(this,"保存失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "保存失败", Toast.LENGTH_SHORT).show();
                 break;
             case MSG_SAVE_SUCCESS:
                 mSaveProgressDlg.dismiss();
-                Toast.makeText(this,"画板已保存",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "画板已保存", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
@@ -166,7 +208,7 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save:
-                if(mSaveProgressDlg==null){
+                if (mSaveProgressDlg == null) {
                     initSaveProgressDlg();
                 }
                 mSaveProgressDlg.show();
@@ -178,7 +220,7 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
                         if (savedFile != null) {
                             scanFile(CreateWork.this, savedFile);
                             mHandler.obtainMessage(MSG_SAVE_SUCCESS).sendToTarget();
-                        }else{
+                        } else {
                             mHandler.obtainMessage(MSG_SAVE_FAILED).sendToTarget();
                         }
                     }
@@ -207,6 +249,7 @@ public class CreateWork extends AppCompatActivity implements View.OnClickListene
                 v.setSelected(true);
                 mEraserView.setSelected(false);
                 mPaletteView.setMode(PaletteView.Mode.DRAW);
+                showSingleChoiceDialog();
                 break;
             case R.id.eraser:
                 v.setSelected(true);
